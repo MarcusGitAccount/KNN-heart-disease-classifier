@@ -1,23 +1,15 @@
-# Description
+#### Description
 
 Writing from scratch a classifier to predict heart diseases using knn.
 
-# Dataset:
+#### Dataset:
 
 http://archive.ics.uci.edu/ml/datasets/Heart+Disease
 
-# Algorithm: 
+#### Algorithm: 
 
-k nearest neighbours
+K nearest neighbours using ball trees.
 
-# Optimization: 
-
-usage of ball trees
-
-# Performance(accuracy):
+#### Performance(accuracy):
 
 TBD
-
-# License
-
-MIT
