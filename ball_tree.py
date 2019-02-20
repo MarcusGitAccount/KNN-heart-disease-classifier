@@ -58,14 +58,16 @@ def traverse_tree(tree_node, plt=None):
     traverse_tree(tree_node.left, plt)
     traverse_tree(tree_node.right, plt)
 
-points = np.random.rand(1000, 10) * 10000
+points = np.random.rand(100, 2) * 10000
 
-# plt.rcParams["font.size"] = 1
-# x = points[:, 0]
-# y = points[:, 1]
+plt.rcParams["font.size"] = 1
+x = points[:, 0]
+y = points[:, 1]
 
-# plt.scatter(x, y)
-# plt.show()
+np.random.randint()
+
+plt.scatter(x, y)
+plt.show()
 
 tree = BallTree(points, euclid_metric)
 
