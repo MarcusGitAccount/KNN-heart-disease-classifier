@@ -13,6 +13,12 @@ class Heap:
   def __repr__(self):
     return 'Heap: %s' % self.container
 
+  def __getitem__(self, index):
+    return self.container[index]
+
+  def __iter__(self):
+    return (item for item in self.container)
+
   def _parent(self, index):
     return (index - 1) >> 1
 
@@ -68,17 +74,35 @@ class Heap:
         return last
     return None
 
-  def make_heap(self):
-    index = len(self.container) >> 1
-    while index > 0:
-      self._heapify(index)
+  def is_empty(self):
+    return len(self) == 0
+
+  @staticmethod
+  def make_heap(array, cmp):
+    heap = Heap(cmp)
+    heap.container = array
+    index = len(array) >> 1
+    while index >= 0:
+      heap._heapify(index)
       index -= 1
 
-
 if __name__ == '__main__':
-  heap = Heap(cmp = lambda parent, child: parent < child)
+  cmp = lambda parent, child: parent < child
+  heap = Heap(cmp)
   for nbr in randint(0, 30, 5):
     heap.push(nbr)
   print(repr(heap))
   heap.pop()
   print(repr(heap))
+
+  for item in heap:
+    print(item, end=' ')
+  print('')
+  for i in range(0, len(heap)):
+    print(heap[i], end=' ')
+  print('')
+
+  arr = randint(0, 25, 15)
+  print(arr)
+  Heap.make_heap(arr, cmp)
+  print(arr)
