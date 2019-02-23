@@ -6,8 +6,10 @@ from data_manipulation import prepare_data
 
 class Classifier:
   def __init__(self, training_data_size_ratio: float, k: int = 5):
+    # Split dataset into training and testing data
     self.dataset = prepare_data().values
     size = int(len(self.dataset) * training_data_size_ratio)
+    # Get the labels(unique values situated on the last column in the dataset)
     self.classes = set(self.dataset[:, -1])
 
     result_col = self.dataset.shape[1] - 1  
@@ -16,6 +18,9 @@ class Classifier:
 
   @staticmethod
   def create_classes(data: np.array, result_col: int, classes: set):
+    # One line chonker
+    # Create a class for each result possibility(in this case only 0 and 1)
+    # with all the data that lead to the given result(the key)
     return dict((class_, data[np.where(data[:, result_col] == class_)][:, :-1]) for class_ in classes)
 
 if __name__ == '__main__':
