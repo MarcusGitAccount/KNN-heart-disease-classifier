@@ -21,13 +21,12 @@ class BallTree:
     if points is None:
       raise ValueError('Dataset not provided.')
     self.is_leaf = True
-    self.center = self.radius = None
-    self.dimension = None
-    self.left  = None
-    self.right = None
-    self.points = np.array(points, copy=True)
+    self.center = self.radius = self.dimension = None
+    self.left = self.right = None
+    self.points = None
 
     if len(points) == 1:
+      self.points = np.array(points, copy=True)
       self.center = self.points[0]
       return None
 
@@ -69,13 +68,31 @@ def traverse_tree(tree_node, plt=None):
     traverse_tree(tree_node.left, plt)
     traverse_tree(tree_node.right, plt)
 
-def _knn_update(node, target, metric):
-  pass
+def _knn_search(node, target, k, metric, queue):
+  pivot = node.center
+  distance = metric(pivot, target)
+  if len(queue) > 0 and distance > queue[0][1]:
+    return
+  elif node.is_leaf:
+    for point in node.points:
+      distance = metric(point, target)
+      if len(queue) < k or distance < queue[0][1]:
+        queue.push((point, distance))
+        if len(queue) > k:
+          queue.pop()
+  else:
+    # Recurse on the child whose center is closes
+    # to the target point. This way we might prune
+    # some parts of the tree branches
+    left = node.left
+    right = node.right
+    if metric(right.center, target) < metric(left.center, target):
+      left, right = right, left
+    _knn_search(left, target, k, metric, queue)
+    _knn_search(right, target, k, metric, queue)
 
-def _knn_prepare(node, target, k, metric):
-  pass
-
-def knn_search(node, target, k, metric, queue):
-  if len(queue) != 0:
-    if metric(node.pivot, target) > metric():
-     pass
+def knn(node, target, k, metric):
+  cmp = lambda a, b: a[1] > b[1]
+  queue = Heap(cmp)
+  _knn_search(node, target, k, metric, queue)
+  return queue
