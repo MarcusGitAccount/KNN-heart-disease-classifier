@@ -56,14 +56,19 @@ hospital)
               by Estes' criteria
 
 32 thalach: maximum heart rate achieved
+
 38 exang: exercise induced angina (1 = yes; 0 = no)
+
 40 oldpeak = ST depression induced by exercise relative to rest
+
 41 slope: the slope of the peak exercise ST segment
   -- Value 1: upsloping
   -- Value 2: flat
   -- Value 3: downsloping
 44 ca: number of major vessels (0-3) colored by flourosopy
+
 51 thal: 3 = normal; 6 = fixed defect; 7 = reversable defect
+
 58 num: diagnosis of heart disease (angiographic disease status)
   -- Value 0: < 50% diameter narrowing
   -- Value 1: > 50% diameter narrowing
