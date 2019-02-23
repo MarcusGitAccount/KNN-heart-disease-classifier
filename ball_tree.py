@@ -21,31 +21,30 @@ class BallTree:
     if points is None:
       raise ValueError('Dataset not provided.')
     self.is_leaf = True
-    self.center = self.radius = self.dimension = None
     self.left = self.right = None
-    self.points = None
 
     if len(points) == 1:
+      self.radius = 0
       self.points = np.array(points, copy=True)
       self.center = self.points[0]
       return None
 
-    mid = len(self.points) >> 1
+    mid = len(points) >> 1
     self.is_leaf = False
     # Computing the dimension of the greatest spread, i.e.
     # the dimension of points from the dataset that
     # spread over the largest interval
-    self.dimension = np.argmax(self.points.max(0) - self.points.min(0))
+    self.dimension = np.argmax(points.max(0) - points.min(0))
     # Compute radius given the metric passed as an argument
     # The metric is used to calculate the distance between 2 points
     # Using the partition method which is a wrapper over the quick-select
     # algorithm.
     center_index = introselect_by_dimension(points, mid, self.dimension)
-    self.center = self.points[center_index]
-    self.radius = np.apply_along_axis(lambda point: metric(self.center, point), 1, self.points).max(0)
+    self.center = points[center_index]
+    self.radius = np.apply_along_axis(lambda point: metric(self.center, point), 1, points).max(0)
 
-    left = self.points[:mid]
-    right = self.points[mid:]
+    left = points[:mid]
+    right = points[mid:]
 
     if len(left) != 0:
       self.left = BallTree(left, metric)
@@ -69,17 +68,17 @@ def traverse_tree(tree_node, plt=None):
     traverse_tree(tree_node.right, plt)
 
 def _knn_search(node, target, k, metric, queue):
-  pivot = node.center
-  distance = metric(pivot, target)
-  if len(queue) > 0 and distance > queue[0][1]:
+  distance = metric(node.center, target)
+  if len(queue) == k and distance - node.radius > queue[0][1]:
     return
   elif node.is_leaf:
-    for point in node.points:
-      distance = metric(point, target)
-      if len(queue) < k or distance < queue[0][1]:
-        queue.push((point, distance))
-        if len(queue) > k:
-          queue.pop()
+    # Each leaf node consists of only one point.
+    point = node.center
+    distance = metric(point, target)
+    if len(queue) < k or distance < queue[0][1]:
+      queue.push((point, distance))
+      if len(queue) > k:
+        queue.pop()
   else:
     # Recurse on the child whose center is closes
     # to the target point. This way we might prune

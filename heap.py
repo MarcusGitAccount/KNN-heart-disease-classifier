@@ -7,6 +7,9 @@ class Heap:
     self.container = list()
     self.cmp = cmp
 
+  def __str__(self):
+    return str(self.container)
+
   def __len__(self):
     return len(self.container)
 

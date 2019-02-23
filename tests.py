@@ -1,9 +1,18 @@
-import numpy as np
-import matplotlib.pyplot as plt
-
 from functools import cmp_to_key
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from ball_tree import BallTree, euclid_metric, knn
 from heap import Heap
-from ball_tree import BallTree, euclid_metric
+
+def traverse(node, plt):
+  if node is not None:
+    if node.is_leaf:
+      x, y = node.center
+      plt.plot(x, y, 'bo', color='#00ff00')
+    traverse(node.left, plt)
+    traverse(node.right, plt)
 
 if __name__ == '__main__':
   plt.title = 'KNN search.'
@@ -14,17 +23,18 @@ if __name__ == '__main__':
   y = points[:, 1]
   plt.scatter(x, y)
 
-  tree = BallTree(points, euclid_metric)
   point = np.random.randint(0, 100, 2)
   x_, y_ = point
   plt.plot(x_, y_, 'bo', color='red')
-  
-  distances = sorted([euclid_metric(point, candidate) for candidate in points])
-  s = set(distances)
 
   k = 10
   cmp = lambda a, b: a[1] > b[1]
   heap = Heap(cmp)
+  
+  distances = sorted([euclid_metric(point, candidate) for candidate in points])
+  distances = distances[:k]
+  s = set(distances)
+
   for candidate in points:
     distance = euclid_metric(point, candidate)
     if len(heap) < k or distance < heap[0][1]:
@@ -36,11 +46,25 @@ if __name__ == '__main__':
     x_, y_ = candidate[0]
     plt.plot(x_, y_, 'bo', color='pink')
 
-  print(distances[:k])
+  print(distances)
   all = True
   for candidate in heap:
     if not candidate[1] in s:
       all = False
       break
-  print('All? %s' % all)
+  print('All found in the brute force approach? %s' % all)
+  
+  tree = BallTree(points, euclid_metric)
+  distance_balls = knn(tree, point, k, euclid_metric)
+  print(len(distance_balls))
+  print(distance_balls)
+
+  all = True
+  for candidate in distance_balls:
+    if not candidate[1] in s:
+      all = False
+      break
+  print('All found in the ball tree approach?   %s' % all)
+
+  # traverse(tree, plt)
   plt.show()
