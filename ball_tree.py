@@ -13,6 +13,9 @@ def introselect_by_dimension(points: [[]], kth, dimension):
   index = partial_sorted[kth][dimension]
   return index
 
+def manhattan_metric(a, b):
+  return np.sum(np.abs(a - b))
+
 def euclid_metric(a, b):
   return np.sqrt(np.sum(np.power(np.subtract(a, b), 2)))
 
