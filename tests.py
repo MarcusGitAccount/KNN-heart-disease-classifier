@@ -15,7 +15,7 @@ def traverse(node, plt):
     traverse(node.right, plt)
 
 if __name__ == '__main__':
-  count = 1000
+  count = 100
   plt.title = 'KNN search.'
   points = np.random.randint(1000, size=(count, 2))
 
@@ -28,7 +28,7 @@ if __name__ == '__main__':
   x_, y_ = point
   plt.plot(x_, y_, 'bo', color='red')
 
-  k = 1
+  k = 10
   cmp = lambda a, b: a[1] > b[1]
   heap = Heap(cmp)
   

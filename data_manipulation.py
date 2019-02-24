@@ -25,6 +25,7 @@ def prepare_data():
   # the #58 attribute in the processed datafiles has a binary value only
   # the values 2, 3, 4 are reminiscent of the before parsing data
   dataset[last_column] = dataset[last_column].replace([2, 3, 4], 1)
+  # dataset = dataset[dataset[last_column] <= 1]
   return dataset
 
 if __name__ == '__main__':
