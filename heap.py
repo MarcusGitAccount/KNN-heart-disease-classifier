@@ -22,6 +22,14 @@ class Heap:
   def __iter__(self):
     return (item for item in self.container)
 
+  # Reunion of two heaps
+  def __add__(self, heap):
+    result = Heap(self.cmp)
+    result.container = [item for item in self.container]
+    for item in heap:
+      result.push(item)
+    return result
+
   def _parent(self, index):
     return (index - 1) >> 1
 
@@ -109,3 +117,13 @@ if __name__ == '__main__':
   print(arr)
   Heap.make_heap(arr, cmp)
   print(arr)
+
+  a = Heap(cmp)
+  b = Heap(cmp)
+  for nbr in randint(0, 30, 5):
+    a.push(nbr)
+  for nbr in randint(0, 30, 5):
+    b.push(nbr)
+  print(a)
+  print(b)
+  print(a + b)
