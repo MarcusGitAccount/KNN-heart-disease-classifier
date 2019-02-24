@@ -76,4 +76,4 @@ hospital)
 
 #### Performance(accuracy):
 
-Currently only 7
+Currently only 77.17%
